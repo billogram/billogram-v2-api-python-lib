@@ -1,4 +1,4 @@
-billogram-v2-api-python-lib
-===========================
+billogram-v2-api-clients
+========================
 
-Python library for the new Billogram REST API
+Library and example code for connecting to the Billogram v2 HTTP API
