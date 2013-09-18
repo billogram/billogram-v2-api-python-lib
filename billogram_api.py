@@ -640,7 +640,7 @@ class BillogramObject(SimpleObject):
         if invoice_no:
             params['invoice_no'] = invoice_no
         resp = self._api.get(url, params, expect_content_type='application/json')
-        return base64.b64decode(resp.data.content)
+        return base64.b64decode(resp['data']['content'])
 
 class BillogramQuery(Query):
     """Represents a query for billogram objects

@@ -228,7 +228,7 @@ def example4(api):
             print("  - has letter_id {0[data][letter_id]}, getting it".format(ev))
             try:
                 pdf = bg.get_invoice_pdf(letter_id=ev['data']['letter_id'])
-                print("  - pdf is {} bytes in base64 encoding".format(len(pdf['content'])))
+                print("  - pdf is {} bytes long".format(len(pdf)))
             except BillogramExceptions.ObjectNotAvailableYetError:
                 print("  - pdf not created yet")
             except BillogramExceptions.ObjectNotFoundError:
