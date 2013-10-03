@@ -21,7 +21,7 @@
 "Library for accessing the Billogram v2 HTTP API"
 
 from __future__ import unicode_literals, print_function, division
-import requests
+import urllib3
 import json
 import math
 
@@ -110,16 +110,19 @@ class BillogramAPI(object):
         Pass the API authentication in the auth_user and auth_key parameters. API accounts can
         only be created from the Billogram web interface.
         """
-        self._auth = (auth_user, auth_key)
+        self._http = urllib3.connectionpool.connection_from_url(api_base or API_URL_BASE)
+        self._baseheaders = urllib3.util.make_headers(
+            basic_auth="{}:{}".format(auth_user, auth_key),
+            user_agent=user_agent or USER_AGENT
+        )
         self._items = None
         self._customers = None
         self._billogram = None
         self._settings = None
         self._logotype = None
         self._reports = None
-        self._user_agent = user_agent or USER_AGENT
-        self._api_base = api_base or API_URL_BASE
-
+        self._api_base = urllib3.util.parse_url(api_base or API_URL_BASE).path
+        
     @property
     def items(self):
         "Provide access to the items database"
@@ -163,37 +166,37 @@ class BillogramAPI(object):
 
     @classmethod
     def _check_api_response(cls, resp, expect_content_type=None):
-        if not resp.ok or expect_content_type is None:
+        if resp.status not in range(200,300) or expect_content_type is None:
             # if the request failed the response should always be json
             expect_content_type = 'application/json'
 
-        if resp.status_code in range(500, 600):
+        if resp.status in range(500, 600):
             # internal error
             if resp.headers['content-type'] == expect_content_type and expect_content_type == 'application/json':
-                data = resp.json()
+                data = json.loads(resp.data)
                 raise ServiceMalfunctioningError('Billogram API reported a server error: {} - {}'.format(data.get('status'), data.get('data').get('message')))
             raise ServiceMalfunctioningError('Billogram API reported a server error')
 
         if resp.headers['content-type'] != expect_content_type:
             # the service returned a different content-type from the expected, probably some malfunction on the remote end
             if resp.headers['content-type'] == 'application/json':
-                data = resp.json()
+                data = json.loads(resp.data)
                 if data.get('status') == 'NOT_AVAILABLE_YET':
                     raise ObjectNotAvailableYetError('Object not available yet')
             raise ServiceMalfunctioningError('Billogram API returned unexpected content type')
 
-        if expect_content_type == 'application/json':
-            data = resp.json()
-            status = data.get('status')
-            if not status:
-                raise ServiceMalfunctioningError('Response data missing status field')
-            if not 'data' in data:
-                raise ServiceMalfunctioningError('Response data missing data field')
-        else:
-            # per above, non-json responses are always ok, so just return them
+        if expect_content_type != 'application/json':
+            # non-json responses don't need any further checking, they are only possible with 2xx status
             return resp.content
 
-        if resp.status_code == 403:
+        data = json.loads(resp.data)
+        status = data.get('status')
+        if not status:
+            raise ServiceMalfunctioningError('Response data missing status field')
+        if not 'data' in data:
+            raise ServiceMalfunctioningError('Response data missing data field')
+
+        if resp.status == 403:
             # bad auth
             if status == 'PERMISSION_DENIED':
                 raise NotAuthorizedError('Not allowed to perform the requested operation')
@@ -204,13 +207,13 @@ class BillogramAPI(object):
             else:
                 raise PermissionDeniedError('Permission denied, status={}'.format(status))
 
-        if resp.status_code == 404:
+        if resp.status == 404:
             # not found
             if data.get('status') == 'NOT_AVAILABLE_YET':
                 raise ObjectNotFoundError('Object not available yet')
             raise ObjectNotFoundError('Object not found')
 
-        if resp.status_code == 405:
+        if resp.status == 405:
             # bad http method
             raise RequestFormError('Invalid HTTP method')
 
@@ -232,22 +235,26 @@ class BillogramAPI(object):
     def get(self, obj, params=None, expect_content_type=None):
         "Perform a HTTP GET request to the Billogram API"
         url = '{}/{}'.format(self._api_base, obj)
-        return self._check_api_response(requests.get(url, auth=self._auth, params=params, headers={'user-agent': self._user_agent}), expect_content_type=expect_content_type)
+        return self._check_api_response(self._http.request('GET', url, fields=params, headers=self._baseheaders), expect_content_type=expect_content_type)
 
     def post(self, obj, data):
         "Perform a HTTP POST request to the Billogram API"
         url = '{}/{}'.format(self._api_base, obj)
-        return self._check_api_response(requests.post(url, auth=self._auth, data=json.dumps(data), headers={'content-type': 'application/json', 'user-agent': self._user_agent}))
+        headers = { 'content-type': 'application/json' }
+        headers.update(self._baseheaders)
+        return self._check_api_response(self._http.urlopen('POST', url, body=json.dumps(data), headers=headers))
 
     def put(self, obj, data):
         "Perform a HTTP PUT request to the Billogram API"
         url = '{}/{}'.format(self._api_base, obj)
-        return self._check_api_response(requests.put(url, auth=self._auth, data=json.dumps(data), headers={'content-type': 'application/json', 'user-agent': self._user_agent}))
+        headers = { 'content-type': 'application/json' }
+        headers.update(self._baseheaders)
+        return self._check_api_response(self._http.urlopen('PUT', url, body=json.dumps(data), headers=headers))
 
     def delete(self, obj):
         "Perform a HTTP DELETE request to the Billogram API"
         url = '{}/{}'.format(self._api_base, obj)
-        return self._check_api_response(requests.delete(url, auth=self._auth, headers={'user-agent': self._user_agent}))
+        return self._check_api_response(self._http.request('DELETE', url, headers=self._baseheaders))
 
 
 class SingletonObject(object):
