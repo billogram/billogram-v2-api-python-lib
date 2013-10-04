@@ -1,0 +1,14 @@
+Billogram v2 API client library
+
+This library provides convenient wrappers for connecting to the public API
+of the Billogram invoicing service.
+
+Full documentation for the API: <https://billogram.com/api/documentation>
+
+The file examples.py contains several code examples for calling the API
+using the library. Note that this file is not installed when using the
+distutils installation.
+
+
+Copyright 2013 Billogram AB.
+Made available under MIT license, see LICENSE file.
