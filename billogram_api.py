@@ -648,7 +648,7 @@ class BillogramQuery(Query):
 
     def filter_state_any(self, *states):
         "Find billogram objects with any state of the listed ones"
-        if len(states) == 1 and (isinstance(states[0], list) or isinstane(states[0], tuple) or isinstance(states[0], set) or isinstance(states[0], frozenset)):
+        if len(states) == 1 and (isinstance(states[0], list) or isinstance(states[0], tuple) or isinstance(states[0], set) or isinstance(states[0], frozenset)):
             states = states[0]
         assert all(isinstance(s, basestring) for s in states)
         return self.filter_field('state', ','.join(states))
