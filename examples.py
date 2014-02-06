@@ -135,7 +135,7 @@ def example2(api):
         print("Current price for item {} is {}".format(item['item_no'], item['price']))
         # modify the item
         item.update({
-            'price': item['price']*1.1
+            'price': round(item['price']*1.1, 2)
         })
         print("    New price is {}".format(item['price']))
 
