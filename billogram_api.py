@@ -642,6 +642,29 @@ class BillogramObject(SimpleObject):
         resp = self._api.get(url, params, expect_content_type='application/json')
         return base64.b64decode(resp['data']['content'])
 
+    def get_attachment_pdf(self, letter_id=None, invoice_no=None):
+        """Fetch the PDF attachment for the billogram
+        """
+        import base64
+        
+        url = '{}/attachment.pdf'.format(self._url)
+
+        resp = self._api.get(url, expect_content_type='application/json')
+        return base64.b64decode(resp['data']['content'])
+
+    def attach_pdf(self, filepath):
+        """Attach a PDF to the billogram
+        """
+        import base64
+        import os
+
+        with file(filepath) as f:
+            content = f.read()
+
+        filename = os.path.basename(filepath)
+        return self.perform_event('attach', {'content': base64.b64encode(content), 'filename': filename})
+
+
 class BillogramQuery(Query):
     """Represents a query for billogram objects
     """
