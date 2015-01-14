@@ -806,6 +806,11 @@ class BillogramObject(SimpleObject):
             }
         )
 
+    def writeoff(self):
+        """Write-off remaining fees from a billogram.
+        """
+        return self.perform_event('writeoff')
+
 
 class BillogramQuery(Query):
     """Represents a query for billogram objects
