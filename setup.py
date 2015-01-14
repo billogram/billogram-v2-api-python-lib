@@ -8,7 +8,7 @@ with open('README') as file:
 
 setup(
     name='billogram_api',
-    version='1.1',
+    version='1.2',
     author='Billogram AB',
     author_email='support@billogram.com',
     description='Library for connecting to the Billogram v2 API',
