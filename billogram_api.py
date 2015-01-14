@@ -46,14 +46,18 @@ class BillogramAPIError(Exception):
     "Base class for errors from the Billogram API"
     def __init__(self, message, **kwargs):
         super(BillogramAPIError, self).__init__(message)
-        for k, v in kwargs.items():
-            if v is not None:
-                setattr(self, k, v)
 
-    def __getattr__(self, name):
-        # called just for non-existent keys, just pretend those are blank
-        # makes handling of keyword arguments to constructor easier
-        return None
+        self.field = kwargs.get('field', None)
+        self.field_path = kwargs.get('field_path', None)
+
+        self.extra_data = kwargs
+        if 'field' in self.extra_data:
+            del self.extra_data['field']
+        if 'field_path' in self.extra_data:
+            del self.extra_data['field_path']
+        if not self.extra_data:
+            self.extra_data = None
+
 
 class ServiceMalfunctioningError(BillogramAPIError):
     "The Billogram API service seems to be malfunctioning"
