@@ -1,29 +1,29 @@
-#encoding=utf-8
+# encoding=utf-8
 # Copyright (c) 2013 Billogram AB
-# 
-# Permission is hereby granted, free of charge, to any person obtaining a copy of
-# this software and associated documentation files (the "Software"), to deal in
-# the Software without restriction, including without limitation the rights to
-# use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-# the Software, and to permit persons to whom the Software is furnished to do so,
-# subject to the following conditions:
-# 
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-# 
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-# FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-# COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-# IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-# CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
 "Library for accessing the Billogram v2 HTTP API"
 
 from __future__ import unicode_literals, print_function, division
 import requests
 import json
-import math
 
 
 API_URL_BASE = "https://billogram.com/api/v2"
@@ -33,11 +33,14 @@ USER_AGENT = "Billogram API Python Library/1.00"
 # python 2/3 intercompatibility
 try:
     unicode  # not defined in py3k
+
     def _printable_repr(s):
-        # python 2.7 can't handle unicode objects from __repr__ so need this wrapper
+        # python 2.7 can't handle unicode objects from __repr__
+        # so need this wrapper
         return s.encode('utf-8')
 except NameError:
     basestring = str  # py3k has no basestring type so fake one
+
     def _printable_repr(s):
         return s
 
@@ -62,42 +65,68 @@ class BillogramAPIError(Exception):
 class ServiceMalfunctioningError(BillogramAPIError):
     "The Billogram API service seems to be malfunctioning"
     pass
+
+
 class RequestFormError(BillogramAPIError):
     "Errors caused by malformed requests"
     pass
+
+
 class PermissionDeniedError(BillogramAPIError):
     "No permission to perform the requested operation"
     pass
+
+
 class InvalidAuthenticationError(PermissionDeniedError):
     "The user/key combination could not be authenticated"
     pass
+
+
 class NotAuthorizedError(PermissionDeniedError):
     "The user does not have authorization to perform the requested operation"
     pass
+
+
 class RequestDataError(BillogramAPIError):
     "Errors caused by bad data passed to request"
     pass
+
+
 class UnknownFieldError(RequestDataError):
     "An unknown field was passed in the request data"
     pass
+
+
 class MissingFieldError(RequestDataError):
     "A required field was missing from the request data"
     pass
+
+
 class InvalidFieldCombinationError(RequestDataError):
     "Mutually exclusive fields were specified together"
     pass
+
+
 class InvalidFieldValueError(RequestDataError):
     "A field was given an out-of-range value or a value of incorrect type"
     pass
+
+
 class ReadOnlyFieldError(RequestDataError):
     "Attempt to modify a read-only field"
     pass
+
+
 class InvalidObjectStateError(RequestDataError):
     "The request can not be performed on an object in this state"
     pass
+
+
 class ObjectNotFoundError(RequestDataError):
     "No object by the requested ID exists"
     pass
+
+
 class ObjectNotAvailableYetError(ObjectNotFoundError):
     "No object by the requested ID exists, but is expected to be created soon"
     pass
@@ -106,13 +135,14 @@ class ObjectNotAvailableYetError(ObjectNotFoundError):
 class BillogramAPI(object):
     """Pseudo-connection to the Billogram v2 API
 
-    Objects of this class provide a call interface to the Billogram v2 HTTP API.
+    Objects of this class provide a call interface to the Billogram
+    v2 HTTP API.
     """
-    def __init__(self, auth_user, auth_key, user_agent = None, api_base = None):
+    def __init__(self, auth_user, auth_key, user_agent=None, api_base=None):
         """Create a Billogram API connection object
 
-        Pass the API authentication in the auth_user and auth_key parameters. API accounts can
-        only be created from the Billogram web interface.
+        Pass the API authentication in the auth_user and auth_key parameters.
+        API accounts can only be created from the Billogram web interface.
         """
         self._auth = (auth_user, auth_key)
         self._items = None
@@ -158,6 +188,7 @@ class BillogramAPI(object):
         if self._logotype is None:
             self._logotype = SingletonObject(self, 'logotype')
         return self._logotype
+
     @property
     def reports(self):
         "Provide access to the reports database"
@@ -173,26 +204,44 @@ class BillogramAPI(object):
 
         if resp.status_code in range(500, 600):
             # internal error
-            if resp.headers['content-type'] == expect_content_type and expect_content_type == 'application/json':
+            if resp.headers['content-type'] == expect_content_type and \
+                    expect_content_type == 'application/json':
                 data = resp.json()
-                raise ServiceMalfunctioningError('Billogram API reported a server error: {} - {}'.format(data.get('status'), data.get('data').get('message')))
-            raise ServiceMalfunctioningError('Billogram API reported a server error')
+                raise ServiceMalfunctioningError(
+                    'Billogram API reported a server error: {} - {}'.format(
+                        data.get('status'),
+                        data.get('data').get('message')
+                    )
+                )
+
+            raise ServiceMalfunctioningError(
+                'Billogram API reported a server error'
+            )
 
         if resp.headers['content-type'] != expect_content_type:
-            # the service returned a different content-type from the expected, probably some malfunction on the remote end
+            # the service returned a different content-type from the expected,
+            # probably some malfunction on the remote end
             if resp.headers['content-type'] == 'application/json':
                 data = resp.json()
                 if data.get('status') == 'NOT_AVAILABLE_YET':
-                    raise ObjectNotAvailableYetError('Object not available yet')
-            raise ServiceMalfunctioningError('Billogram API returned unexpected content type')
+                    raise ObjectNotAvailableYetError(
+                        'Object not available yet'
+                    )
+            raise ServiceMalfunctioningError(
+                'Billogram API returned unexpected content type'
+            )
 
         if expect_content_type == 'application/json':
             data = resp.json()
             status = data.get('status')
             if not status:
-                raise ServiceMalfunctioningError('Response data missing status field')
+                raise ServiceMalfunctioningError(
+                    'Response data missing status field'
+                )
             if not 'data' in data:
-                raise ServiceMalfunctioningError('Response data missing data field')
+                raise ServiceMalfunctioningError(
+                    'Response data missing data field'
+                )
         else:
             # per above, non-json responses are always ok, so just return them
             return resp.content
@@ -200,13 +249,22 @@ class BillogramAPI(object):
         if resp.status_code == 403:
             # bad auth
             if status == 'PERMISSION_DENIED':
-                raise NotAuthorizedError('Not allowed to perform the requested operation')
+                raise NotAuthorizedError(
+                    'Not allowed to perform the requested operation'
+                )
             elif status == 'INVALID_AUTH':
-                raise InvalidAuthenticationError('The user/key combination is wrong, check the credentials used and possibly generate a new set')
+                raise InvalidAuthenticationError(
+                    'The user/key combination is wrong, check the credentials \
+                     used and possibly generate a new set'
+                )
             elif status == 'MISSING_AUTH':
                 raise RequestFormError('No authentication data was given')
             else:
-                raise PermissionDeniedError('Permission denied, status={}'.format(status))
+                raise PermissionDeniedError(
+                    'Permission denied, status={}'.format(
+                        status
+                    )
+                )
 
         if resp.status_code == 404:
             # not found
@@ -236,35 +294,69 @@ class BillogramAPI(object):
     def get(self, obj, params=None, expect_content_type=None):
         "Perform a HTTP GET request to the Billogram API"
         url = '{}/{}'.format(self._api_base, obj)
-        return self._check_api_response(requests.get(url, auth=self._auth, params=params, headers={'user-agent': self._user_agent}), expect_content_type=expect_content_type)
+        return self._check_api_response(
+            requests.get(
+                url,
+                auth=self._auth,
+                params=params,
+                headers={'user-agent': self._user_agent}
+            ),
+            expect_content_type=expect_content_type
+        )
 
     def post(self, obj, data):
         "Perform a HTTP POST request to the Billogram API"
         url = '{}/{}'.format(self._api_base, obj)
-        return self._check_api_response(requests.post(url, auth=self._auth, data=json.dumps(data), headers={'content-type': 'application/json', 'user-agent': self._user_agent}))
+        return self._check_api_response(
+            requests.post(
+                url,
+                auth=self._auth,
+                data=json.dumps(data),
+                headers={
+                    'content-type': 'application/json',
+                    'user-agent': self._user_agent
+                }
+            )
+        )
 
     def put(self, obj, data):
         "Perform a HTTP PUT request to the Billogram API"
         url = '{}/{}'.format(self._api_base, obj)
-        return self._check_api_response(requests.put(url, auth=self._auth, data=json.dumps(data), headers={'content-type': 'application/json', 'user-agent': self._user_agent}))
+        return self._check_api_response(
+            requests.put(
+                url,
+                auth=self._auth,
+                data=json.dumps(data),
+                headers={
+                    'content-type': 'application/json',
+                    'user-agent': self._user_agent
+                }
+            )
+        )
 
     def delete(self, obj):
         "Perform a HTTP DELETE request to the Billogram API"
         url = '{}/{}'.format(self._api_base, obj)
-        return self._check_api_response(requests.delete(url, auth=self._auth, headers={'user-agent': self._user_agent}))
+        return self._check_api_response(
+            requests.delete(
+                url,
+                auth=self._auth,
+                headers={'user-agent': self._user_agent}
+            )
+        )
 
 
 class SingletonObject(object):
     """Represents a remote singleton object on Billogram
 
-    Implements __getattr__ for dict-like access to the data of the remote object,
-    or use the 'data' property to access the backing dict object. The data in this
-    dict and all sub-objects should be treated as read-only, the only way to
-    change the remote object is through the 'update' method.
+    Implements __getattr__ for dict-like access to the data of the remote
+    object, or use the 'data' property to access the backing dict object.
+    The data in this dict and all sub-objects should be treated as read-only,
+    the only way to change the remote object is through the 'update' method.
 
     The represented object is initially "lazy" and will only be fetched on the
-    first access. If the remote data are changed, the local copy can be updated by
-    the 'refresh' method.
+    first access. If the remote data are changed, the local copy can be updated
+    bythe 'refresh' method.
 
     See the online documentation for the actual structure of remote objects.
     """
@@ -280,7 +372,12 @@ class SingletonObject(object):
         return self.data[key]
 
     def __repr__(self):
-        return _printable_repr("<Billogram object '{}'{}>".format(self._url, (self._data is None) and ' (lazy)' or ''))
+        return _printable_repr(
+            "<Billogram object '{}'{}>".format(
+                self._url,
+                (self._data is None) and ' (lazy)' or ''
+            )
+        )
 
     @property
     def _url(self):
@@ -309,10 +406,10 @@ class SingletonObject(object):
 class SimpleObject(SingletonObject):
     """Represents a remote object on the Billogram service
 
-    Implements __getattr__ for dict-like access to the data of the remote object,
-    or use the 'data' property to access the backing dict object. The data in this
-    dict and all sub-objects should be treated as read-only, the only way to
-    change the remote object is through the 'update' method.
+    Implements __getattr__ for dict-like access to the data of the remote
+    object, or use the 'data' property to access the backing dict object.
+    The data in this dict and all sub-objects should be treated as read-only,
+    the only way to change the remote object is through the 'update' method.
 
     If the remote data are changed, the local copy can be updated by
     the 'refresh' method.
@@ -337,8 +434,9 @@ class SimpleObject(SingletonObject):
 
     def delete(self):
         "Remove the remote object from the database"
-        resp = self._api.delete(self._url)
+        self._api.delete(self._url)
         return None
+
 
 class Query(object):
     """Builds queries and fetches pages of remote objects
@@ -380,20 +478,22 @@ class Query(object):
         """Total amount of objects matched by the current query, reading this
         may cause a remote request"""
         if self._count_cached is None:
-            # make a query for a single result, this will update the cached count
+            # make a query for a single result,
+            # this will update the cached count
             self._make_query(1, 1)
         return self._count_cached
 
     @property
     def total_pages(self):
-        """Total number of pages required for all objects based on current pagesize,
-        reading this may cause a remote request"""
+        """Total number of pages required for all objects based on current
+        pagesize, reading this may cause a remote request"""
         return (self.count + self.page_size - 1) // self.page_size
 
     @property
     def page_size(self):
         "Number of objects to return per page"
         return self._page_size
+
     @page_size.setter
     def page_size(self, value):
         value = int(value)
@@ -405,13 +505,21 @@ class Query(object):
     def filter(self):
         "Filter to apply to query"
         return self._filter
+
     @filter.setter
     def filter(self, value):
         if value == self._filter:
             return
         if value:
-            assert 'filter_type' in value and 'filter_field' in value and 'filter_value' in value
-            assert value['filter_type'] in ('field', 'field-prefix', 'field-search', 'special')
+            assert 'filter_type' in value and \
+                'filter_field' in value and \
+                'filter_value' in value
+            assert value['filter_type'] in (
+                'field',
+                'field-prefix',
+                'field-search',
+                'special'
+                )
             self._filter = dict(value)
         else:
             self._filter = {}
@@ -421,6 +529,7 @@ class Query(object):
     @property
     def order(self):
         return self._order
+
     @order.setter
     def order(self, value):
         if value:
@@ -431,11 +540,16 @@ class Query(object):
             self._order = {}
         return self
 
-    def make_filter(self, filter_type=None, filter_field=None, filter_value=None):
+    def make_filter(self, filter_type=None, filter_field=None,
+                    filter_value=None):
         if None in (filter_type, filter_field, filter_value):
             self.filter = {}
         else:
-            self.filter = {'filter_type': filter_type, 'filter_field': filter_field, 'filter_value': filter_value}
+            self.filter = {
+                'filter_type': filter_type,
+                'filter_field': filter_field,
+                'filter_value': filter_value
+            }
         return self
 
     def remove_filter(self):
@@ -466,11 +580,18 @@ class Query(object):
     def get_page(self, page_number):
         "Fetch objects for the one-based page number"
         resp = self._make_query(int(page_number))
-        return [self._type_class._object_class(self._type_class.api, self._type_class, o) for o in resp['data']]
+        return [
+            self._type_class._object_class(
+                self._type_class.api,
+                self._type_class,
+                o
+            ) for o in resp['data']
+        ]
 
     def iter_all(self):
         "Iterate over all matched objects"
-        # make a copy of ourselves so parameters can't be changed behind our back
+        # make a copy of ourselves so parameters can't be changed behind
+        # our back
         import copy
         qry = copy.copy(self)
         # iterate over every object on every page
@@ -478,6 +599,7 @@ class Query(object):
             page = qry.get_page(page_number)
             for obj in page:
                 yield obj
+
 
 class SimpleClass(object):
     """Represents a collection of remote objects on the Billogram service
@@ -553,7 +675,13 @@ class BillogramObject(SimpleObject):
         Only possible in states "Unpaid", "Sold" and "Ended".
         """
         assert amount > 0
-        return self.perform_event('credit', {'mode': 'amount', 'amount': amount})
+        return self.perform_event(
+            'credit',
+            {
+                'mode': 'amount',
+                'amount': amount
+            }
+        )
 
     def credit_full(self):
         """Credit the full, original amount of the billogram
@@ -635,7 +763,7 @@ class BillogramObject(SimpleObject):
         """Fetch the PDF content for a specific invoice on this billogram
         """
         import base64
-        
+
         url = '{}.pdf'.format(self._url)
 
         params = {}
@@ -643,14 +771,18 @@ class BillogramObject(SimpleObject):
             params['letter_id'] = letter_id
         if invoice_no:
             params['invoice_no'] = invoice_no
-        resp = self._api.get(url, params, expect_content_type='application/json')
+        resp = self._api.get(
+            url,
+            params,
+            expect_content_type='application/json'
+        )
         return base64.b64decode(resp['data']['content'])
 
     def get_attachment_pdf(self, letter_id=None, invoice_no=None):
         """Fetch the PDF attachment for the billogram
         """
         import base64
-        
+
         url = '{}/attachment.pdf'.format(self._url)
 
         resp = self._api.get(url, expect_content_type='application/json')
@@ -666,7 +798,13 @@ class BillogramObject(SimpleObject):
             content = f.read()
 
         filename = os.path.basename(filepath)
-        return self.perform_event('attach', {'content': base64.b64encode(content), 'filename': filename})
+        return self.perform_event(
+            'attach',
+            {
+                'content': base64.b64encode(content),
+                'filename': filename
+            }
+        )
 
 
 class BillogramQuery(Query):
@@ -675,17 +813,23 @@ class BillogramQuery(Query):
 
     def filter_state_any(self, *states):
         "Find billogram objects with any state of the listed ones"
-        if len(states) == 1 and (isinstance(states[0], list) or isinstance(states[0], tuple) or isinstance(states[0], set) or isinstance(states[0], frozenset)):
+        if len(states) == 1 and (
+            isinstance(states[0], list) or
+            isinstance(states[0], tuple) or
+            isinstance(states[0], set) or
+            isinstance(states[0], frozenset)
+        ):
             states = states[0]
         assert all(isinstance(s, basestring) for s in states)
         return self.filter_field('state', ','.join(states))
 
+
 class BillogramClass(SimpleClass):
     """Represents the collection of billogram objects on the Billogram service
 
-    In addition to the methods of the SimpleClass collection wrapper, also provides
-    specialized creation methods to create billogram objects and state transition them
-    immediately.
+    In addition to the methods of the SimpleClass collection wrapper, also
+    provides specialized creation methods to create billogram objects and state
+    transition them immediately.
     """
     _object_class = BillogramObject
 
@@ -704,7 +848,8 @@ class BillogramClass(SimpleClass):
          - "Letter"
          - "Email+Letter".
 
-        New billogram will be in state "Unpaid" or "Ended" (if the total sum would be zero).
+        New billogram will be in state "Unpaid" or "Ended" (if the total sum
+        would be zero).
         """
         assert method in ('Email', 'Letter', 'Email+Letter')
         billogram = self.create(data)
@@ -726,8 +871,18 @@ class BillogramClass(SimpleClass):
 
 
 # make an exportable namespace-class with all the exceptions
-BillogramExceptions = type(str('BillogramExceptions'), (), {nm: cl for nm, cl in globals().items() if isinstance(cl, type) and issubclass(cl, BillogramAPIError)})
+BillogramExceptions = type(
+    str('BillogramExceptions'),
+    (),
+    {
+        nm: cl for
+        nm, cl in
+        globals().items() if
+        isinstance(cl, type) and issubclass(cl, BillogramAPIError)
+    }
+)
 
-# just the BillogramAPI class and the exceptions are really part of the call API of this module
+# just the BillogramAPI class and the exceptions are really part
+# of the call API of this module
 __all__ = ['BillogramAPI', 'BillogramExceptions']
 
