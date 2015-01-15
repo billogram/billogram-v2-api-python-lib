@@ -1,0 +1,2565 @@
+<!doctype html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+
+    <title>billogram_api API documentation</title>
+    <meta name="description" content="Library for accessing the Billogram v2 HTTP API" />
+
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
+  
+  <style type="text/css">
+  
+* {
+  box-sizing: border-box;
+}
+/*! normalize.css v1.1.1 | MIT License | git.io/normalize */
+
+/* ==========================================================================
+   HTML5 display definitions
+   ========================================================================== */
+
+/**
+ * Correct `block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+    display: block;
+}
+
+/**
+ * Correct `inline-block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+
+audio,
+canvas,
+video {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+/**
+ * Prevent modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS 5 devices.
+ */
+
+audio:not([controls]) {
+    display: none;
+    height: 0;
+}
+
+/**
+ * Address styling not present in IE 7/8/9, Firefox 3, and Safari 4.
+ * Known issue: no IE 6 support.
+ */
+
+[hidden] {
+    display: none;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+/**
+ * 1. Prevent system color scheme's background color being used in Firefox, IE,
+ *    and Opera.
+ * 2. Prevent system color scheme's text color being used in Firefox, IE, and
+ *    Opera.
+ * 3. Correct text resizing oddly in IE 6/7 when body `font-size` is set using
+ *    `em` units.
+ * 4. Prevent iOS text size adjust after orientation change, without disabling
+ *    user zoom.
+ */
+
+html {
+    background: #fff; /* 1 */
+    color: #000; /* 2 */
+    font-size: 100%; /* 3 */
+    -webkit-text-size-adjust: 100%; /* 4 */
+    -ms-text-size-adjust: 100%; /* 4 */
+}
+
+/**
+ * Address `font-family` inconsistency between `textarea` and other form
+ * elements.
+ */
+
+html,
+button,
+input,
+select,
+textarea {
+    font-family: sans-serif;
+}
+
+/**
+ * Address margins handled incorrectly in IE 6/7.
+ */
+
+body {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Links
+   ========================================================================== */
+
+/**
+ * Address `outline` inconsistency between Chrome and other browsers.
+ */
+
+a:focus {
+    outline: thin dotted;
+}
+
+/**
+ * Improve readability when focused and also mouse hovered in all browsers.
+ */
+
+a:active,
+a:hover {
+    outline: 0;
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+/**
+ * Address font sizes and margins set differently in IE 6/7.
+ * Address font sizes within `section` and `article` in Firefox 4+, Safari 5,
+ * and Chrome.
+ */
+
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin: 0.83em 0;
+}
+
+h3 {
+    font-size: 1.17em;
+    margin: 1em 0;
+}
+
+h4 {
+    font-size: 1em;
+    margin: 1.33em 0;
+}
+
+h5 {
+    font-size: 0.83em;
+    margin: 1.67em 0;
+}
+
+h6 {
+    font-size: 0.67em;
+    margin: 2.33em 0;
+}
+
+/**
+ * Address styling not present in IE 7/8/9, Safari 5, and Chrome.
+ */
+
+abbr[title] {
+    border-bottom: 1px dotted;
+}
+
+/**
+ * Address style set to `bolder` in Firefox 3+, Safari 4/5, and Chrome.
+ */
+
+b,
+strong {
+    font-weight: bold;
+}
+
+blockquote {
+    margin: 1em 40px;
+}
+
+/**
+ * Address styling not present in Safari 5 and Chrome.
+ */
+
+dfn {
+    font-style: italic;
+}
+
+/**
+ * Address differences between Firefox and other browsers.
+ * Known issue: no IE 6/7 normalization.
+ */
+
+hr {
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    height: 0;
+}
+
+/**
+ * Address styling not present in IE 6/7/8/9.
+ */
+
+mark {
+    background: #ff0;
+    color: #000;
+}
+
+/**
+ * Address margins set differently in IE 6/7.
+ */
+
+p,
+pre {
+    margin: 1em 0;
+}
+
+/**
+ * Correct font family set oddly in IE 6, Safari 4/5, and Chrome.
+ */
+
+code,
+kbd,
+pre,
+samp {
+    font-family: monospace, serif;
+    _font-family: 'courier new', monospace;
+    font-size: 1em;
+}
+
+/**
+ * Improve readability of pre-formatted text in all browsers.
+ */
+
+pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/**
+ * Address CSS quotes not supported in IE 6/7.
+ */
+
+q {
+    quotes: none;
+}
+
+/**
+ * Address `quotes` property not supported in Safari 4.
+ */
+
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+/**
+ * Address inconsistent and variable font size in all browsers.
+ */
+
+small {
+    font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+ */
+
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -0.5em;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+/* ==========================================================================
+   Lists
+   ========================================================================== */
+
+/**
+ * Address margins set differently in IE 6/7.
+ */
+
+dl,
+menu,
+ol,
+ul {
+    margin: 1em 0;
+}
+
+dd {
+    margin: 0 0 0 40px;
+}
+
+/**
+ * Address paddings set differently in IE 6/7.
+ */
+
+menu,
+ol,
+ul {
+    padding: 0 0 0 40px;
+}
+
+/**
+ * Correct list images handled incorrectly in IE 7.
+ */
+
+nav ul,
+nav ol {
+    list-style: none;
+    list-style-image: none;
+}
+
+/* ==========================================================================
+   Embedded content
+   ========================================================================== */
+
+/**
+ * 1. Remove border when inside `a` element in IE 6/7/8/9 and Firefox 3.
+ * 2. Improve image quality when scaled in IE 7.
+ */
+
+img {
+    border: 0; /* 1 */
+    -ms-interpolation-mode: bicubic; /* 2 */
+}
+
+/**
+ * Correct overflow displayed oddly in IE 9.
+ */
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   Figures
+   ========================================================================== */
+
+/**
+ * Address margin not present in IE 6/7/8/9, Safari 5, and Opera 11.
+ */
+
+figure {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+/**
+ * Correct margin displayed oddly in IE 6/7.
+ */
+
+form {
+    margin: 0;
+}
+
+/**
+ * Define consistent border, margin, and padding.
+ */
+
+fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0.35em 0.625em 0.75em;
+}
+
+/**
+ * 1. Correct color not being inherited in IE 6/7/8/9.
+ * 2. Correct text not wrapping in Firefox 3.
+ * 3. Correct alignment displayed oddly in IE 6/7.
+ */
+
+legend {
+    border: 0; /* 1 */
+    padding: 0;
+    white-space: normal; /* 2 */
+    *margin-left: -7px; /* 3 */
+}
+
+/**
+ * 1. Correct font size not being inherited in all browsers.
+ * 2. Address margins set differently in IE 6/7, Firefox 3+, Safari 5,
+ *    and Chrome.
+ * 3. Improve appearance and consistency in all browsers.
+ */
+
+button,
+input,
+select,
+textarea {
+    font-size: 100%; /* 1 */
+    margin: 0; /* 2 */
+    vertical-align: baseline; /* 3 */
+    *vertical-align: middle; /* 3 */
+}
+
+/**
+ * Address Firefox 3+ setting `line-height` on `input` using `!important` in
+ * the UA stylesheet.
+ */
+
+button,
+input {
+    line-height: normal;
+}
+
+/**
+ * Address inconsistent `text-transform` inheritance for `button` and `select`.
+ * All other form control elements do not inherit `text-transform` values.
+ * Correct `button` style inheritance in Chrome, Safari 5+, and IE 6+.
+ * Correct `select` style inheritance in Firefox 4+ and Opera.
+ */
+
+button,
+select {
+    text-transform: none;
+}
+
+/**
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *    and `video` controls.
+ * 2. Correct inability to style clickable `input` types in iOS.
+ * 3. Improve usability and consistency of cursor style between image-type
+ *    `input` and others.
+ * 4. Remove inner spacing in IE 7 without affecting normal text inputs.
+ *    Known issue: inner spacing remains in IE 6.
+ */
+
+button,
+html input[type="button"], /* 1 */
+input[type="reset"],
+input[type="submit"] {
+    -webkit-appearance: button; /* 2 */
+    cursor: pointer; /* 3 */
+    *overflow: visible;  /* 4 */
+}
+
+/**
+ * Re-set default cursor for disabled elements.
+ */
+
+button[disabled],
+html input[disabled] {
+    cursor: default;
+}
+
+/**
+ * 1. Address box sizing set to content-box in IE 8/9.
+ * 2. Remove excess padding in IE 8/9.
+ * 3. Remove excess padding in IE 7.
+ *    Known issue: excess padding remains in IE 6.
+ */
+
+input[type="checkbox"],
+input[type="radio"] {
+    box-sizing: border-box; /* 1 */
+    padding: 0; /* 2 */
+    *height: 13px; /* 3 */
+    *width: 13px; /* 3 */
+}
+
+/**
+ * 1. Address `appearance` set to `searchfield` in Safari 5 and Chrome.
+ * 2. Address `box-sizing` set to `border-box` in Safari 5 and Chrome
+ *    (include `-moz` to future-proof).
+ */
+
+input[type="search"] {
+    -webkit-appearance: textfield; /* 1 */
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box; /* 2 */
+    box-sizing: content-box;
+}
+
+/**
+ * Remove inner padding and search cancel button in Safari 5 and Chrome
+ * on OS X.
+ */
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+/**
+ * Remove inner padding and border in Firefox 3+.
+ */
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/**
+ * 1. Remove default vertical scrollbar in IE 6/7/8/9.
+ * 2. Improve readability and alignment in all browsers.
+ */
+
+textarea {
+    overflow: auto; /* 1 */
+    vertical-align: top; /* 2 */
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+
+/**
+ * Remove most spacing between table cells.
+ */
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+  </style>
+
+  <style type="text/css">
+  
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  body {
+    background: #fff;
+    font-family: "Source Sans Pro", "Helvetica Neueue", Helvetica, sans;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.6em;
+  }
+  #content {
+    width: 70%;
+    max-width: 850px;
+    float: left;
+    padding: 30px 60px;
+    border-left: 1px solid #ddd;
+  }
+  #sidebar {
+    width: 25%;
+    float: left;
+    padding: 30px;
+    overflow: hidden;
+  }
+  #nav {
+    font-size: 130%;
+    margin: 0 0 15px 0;
+  }
+
+  #top {
+    display: block;
+    position: fixed;
+    bottom: 5px;
+    left: 5px;
+    font-size: .85em;
+    text-transform: uppercase;
+  }
+
+  #footer {
+    font-size: .75em;
+    padding: 5px 30px;
+    border-top: 1px solid #ddd;
+    text-align: right;
+  }
+    #footer p {
+      margin: 0 0 0 30px;
+      display: inline-block;
+    }
+
+  h1, h2, h3, h4, h5 {
+    font-weight: 300;
+  }
+  h1 {
+    font-size: 2.5em;
+    line-height: 1.1em;
+    margin: 0 0 .50em 0;
+  }
+
+  h2 {
+    font-size: 1.75em;
+    margin: 1em 0 .50em 0;
+  }
+
+  h3 {
+    margin: 25px 0 10px 0;
+  }
+
+  h4 {
+    margin: 0;
+    font-size: 105%;
+  }
+
+  a {
+    color: #058;
+    text-decoration: none;
+    transition: color .3s ease-in-out;
+  }
+
+  a:hover {
+    color: #e08524;
+    transition: color .3s ease-in-out;
+  }
+
+  pre, code, .mono, .name {
+    font-family: "Ubuntu Mono", "Cousine", "DejaVu Sans Mono", monospace;
+  }
+
+  .title .name {
+    font-weight: bold;
+  }
+  .section-title {
+    margin-top: 2em;
+  }
+  .ident {
+    color: #900;
+  }
+
+  code {
+    background: #f9f9f9;
+  } 
+
+  pre {
+    background: #fefefe;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 0 #f3f3f3;
+    margin: 0 30px;
+    padding: 15px 30px;
+  }
+
+  .codehilite {
+    margin: 0 30px 10px 30px;
+  }
+
+    .codehilite pre {
+      margin: 0;
+    }
+    .codehilite .err { background: #ff3300; color: #fff !important; } 
+
+  table#module-list {
+    font-size: 110%;
+  }
+
+    table#module-list tr td:first-child {
+      padding-right: 10px;
+      white-space: nowrap;
+    }
+
+    table#module-list td {
+      vertical-align: top;
+      padding-bottom: 8px;
+    }
+
+      table#module-list td p {
+        margin: 0 0 7px 0;
+      }
+
+  .def {
+    display: table;
+  }
+
+    .def p {
+      display: table-cell;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .def p:first-child {
+      white-space: nowrap;
+    }
+
+    .def p:last-child {
+      width: 100%;
+    }
+
+
+  #index {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+    ul#index .class_name {
+      /* font-size: 110%; */
+      font-weight: bold;
+    }
+    #index ul {
+      margin: 0;
+    }
+
+  .item {
+    margin: 0 0 15px 0;
+  }
+
+    .item .class {
+      margin: 0 0 25px 30px;
+    }
+
+      .item .class ul.class_list {
+        margin: 0 0 20px 0;
+      }
+
+    .item .name {
+      background: #fafafa;
+      margin: 0;
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 3px;
+      display: inline-block;
+      min-width: 40%;
+    }
+      .item .name:hover {
+        background: #f6f6f6;
+      }
+
+    .item .empty_desc {
+      margin: 0 0 5px 0;
+      padding: 0;
+    }
+
+    .item .inheritance {
+      margin: 3px 0 0 30px;
+    }
+
+    .item .inherited {
+      color: #666;
+    }
+
+    .item .desc {
+      padding: 0 8px;
+      margin: 0;
+    }
+
+      .item .desc p {
+        margin: 0 0 10px 0;
+      }
+
+    .source_cont {
+      margin: 0;
+      padding: 0;
+    }
+
+    .source_link a {
+      background: #ffc300;
+      font-weight: 400;
+      font-size: .75em;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 1px 1px 0 #f4b700;
+      
+      padding: 3px 8px;
+      border-radius: 2px;
+      transition: background .3s ease-in-out;
+    }
+      .source_link a:hover {
+        background: #FF7200;
+        text-shadow: none;
+        transition: background .3s ease-in-out;
+      }
+
+    .source {
+      display: none;
+      max-height: 600px;
+      overflow-y: scroll;
+      margin-bottom: 15px;
+    }
+
+      .source .codehilite {
+        margin: 0;
+      }
+
+  .desc h1, .desc h2, .desc h3 {
+    font-size: 100% !important;
+  }
+  .clear {
+    clear: both;
+  }
+
+  @media all and (max-width: 950px) {
+    #sidebar {
+      width: 35%;
+    }
+    #content {
+      width: 65%;
+    }
+  }
+  @media all and (max-width: 650px) {
+    #top {
+      display: none;
+    }
+    #sidebar {
+      float: none;
+      width: auto;
+    }
+    #content {
+      float: none;
+      width: auto;
+      padding: 30px;
+    }
+
+    #index ul {
+      padding: 0;
+      margin-bottom: 15px;
+    }
+    #index ul li {
+      display: inline-block;
+      margin-right: 30px;
+    }
+    #footer {
+      text-align: left;
+    }
+    #footer p {
+      display: block;
+      margin: inherit;
+    }
+  }
+
+  /*****************************/
+
+  </style>
+
+
+  <style type="text/css">
+  
+/* ==========================================================================
+   EXAMPLE Media Queries for Responsive Design.
+   These examples override the primary ('mobile first') styles.
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 35em) {
+    /* Style adjustments for viewports that meet the condition */
+}
+
+@media print,
+       (-o-min-device-pixel-ratio: 5/4),
+       (-webkit-min-device-pixel-ratio: 1.25),
+       (min-resolution: 120dpi) {
+    /* Style adjustments for high resolution devices */
+}
+
+/* ==========================================================================
+   Print styles.
+   Inlined to avoid required HTTP connection: h5bp.com/r
+   ========================================================================== */
+
+@media print {
+    * {
+        background: transparent !important;
+        color: #000 !important; /* Black prints faster: h5bp.com/s */
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+
+    /*
+     * Don't show links for images, or javascript/internal links
+     */
+
+    .ir a:after,
+    a[href^="javascript:"]:after,
+    a[href^="#"]:after {
+        content: "";
+    }
+
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group; /* h5bp.com/t */
+    }
+
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100% !important;
+    }
+
+    @page {
+        margin: 0.5cm;
+    }
+
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+}
+
+  </style>
+
+  <script type="text/javascript">
+  function toggle(id, $link) {
+    $node = document.getElementById(id);
+    if (!$node)
+    return;
+    if (!$node.style.display || $node.style.display == 'none') {
+    $node.style.display = 'block';
+    $link.innerHTML = 'Hide source &nequiv;';
+    } else {
+    $node.style.display = 'none';
+    $link.innerHTML = 'Show source &equiv;';
+    }
+  }
+  </script>
+</head>
+<body>
+<a href="#" id="top">Top</a>
+
+<div id="container">
+    
+  
+  <div id="sidebar">
+    <h1>Index</h1>
+    <ul id="index">
+
+
+    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
+      <ul>
+        <li class="mono">
+        <span class="class_name"><a href="#billogram_api.BillogramAPI">BillogramAPI</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#billogram_api.BillogramAPI.__init__">__init__</a></li>
+    <li class="mono"><a href="#billogram_api.BillogramAPI.delete">delete</a></li>
+    <li class="mono"><a href="#billogram_api.BillogramAPI.get">get</a></li>
+    <li class="mono"><a href="#billogram_api.BillogramAPI.post">post</a></li>
+    <li class="mono"><a href="#billogram_api.BillogramAPI.put">put</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#billogram_api.BillogramExceptions">BillogramExceptions</a></span>
+        
+        </li>
+      </ul>
+    </li>
+
+    </ul>
+  </div>
+
+    <article id="content">
+      
+  
+
+  
+
+
+  <header id="section-intro">
+  <h1 class="title"><span class="name">billogram_api</span> module</h1>
+  <p>Library for accessing the Billogram v2 HTTP API</p>
+  
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-billogram_api', this);">Show source &equiv;</a></p>
+  <div id="source-billogram_api" class="source">
+    <pre><code># encoding=utf-8
+# Copyright (c) 2013 Billogram AB
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+"Library for accessing the Billogram v2 HTTP API"
+
+from __future__ import unicode_literals, print_function, division
+import requests
+import json
+
+
+API_URL_BASE = "https://billogram.com/api/v2"
+USER_AGENT = "Billogram API Python Library/1.00"
+
+
+# python 2/3 intercompatibility
+try:
+    unicode  # not defined in py3k
+
+    def _printable_repr(s):
+        # python 2.7 can't handle unicode objects from __repr__
+        # so need this wrapper
+        return s.encode('utf-8')
+except NameError:
+    basestring = str  # py3k has no basestring type so fake one
+
+    def _printable_repr(s):
+        return s
+
+
+class BillogramAPIError(Exception):
+    "Base class for errors from the Billogram API"
+    def __init__(self, message, **kwargs):
+        super(BillogramAPIError, self).__init__(message)
+
+        self.field = kwargs.get('field', None)
+        self.field_path = kwargs.get('field_path', None)
+
+        self.extra_data = kwargs
+        if 'field' in self.extra_data:
+            del self.extra_data['field']
+        if 'field_path' in self.extra_data:
+            del self.extra_data['field_path']
+        if not self.extra_data:
+            self.extra_data = None
+
+
+class ServiceMalfunctioningError(BillogramAPIError):
+    "The Billogram API service seems to be malfunctioning"
+    pass
+
+
+class RequestFormError(BillogramAPIError):
+    "Errors caused by malformed requests"
+    pass
+
+
+class PermissionDeniedError(BillogramAPIError):
+    "No permission to perform the requested operation"
+    pass
+
+
+class InvalidAuthenticationError(PermissionDeniedError):
+    "The user/key combination could not be authenticated"
+    pass
+
+
+class NotAuthorizedError(PermissionDeniedError):
+    "The user does not have authorization to perform the requested operation"
+    pass
+
+
+class RequestDataError(BillogramAPIError):
+    "Errors caused by bad data passed to request"
+    pass
+
+
+class UnknownFieldError(RequestDataError):
+    "An unknown field was passed in the request data"
+    pass
+
+
+class MissingFieldError(RequestDataError):
+    "A required field was missing from the request data"
+    pass
+
+
+class InvalidFieldCombinationError(RequestDataError):
+    "Mutually exclusive fields were specified together"
+    pass
+
+
+class InvalidFieldValueError(RequestDataError):
+    "A field was given an out-of-range value or a value of incorrect type"
+    pass
+
+
+class ReadOnlyFieldError(RequestDataError):
+    "Attempt to modify a read-only field"
+    pass
+
+
+class InvalidObjectStateError(RequestDataError):
+    "The request can not be performed on an object in this state"
+    pass
+
+
+class ObjectNotFoundError(RequestDataError):
+    "No object by the requested ID exists"
+    pass
+
+
+class ObjectNotAvailableYetError(ObjectNotFoundError):
+    "No object by the requested ID exists, but is expected to be created soon"
+    pass
+
+
+class BillogramAPI(object):
+    """Pseudo-connection to the Billogram v2 API
+
+    Objects of this class provide a call interface to the Billogram
+    v2 HTTP API.
+    """
+    def __init__(self, auth_user, auth_key, user_agent=None, api_base=None):
+        """Create a Billogram API connection object
+
+        Pass the API authentication in the auth_user and auth_key parameters.
+        API accounts can only be created from the Billogram web interface.
+        """
+        self._auth = (auth_user, auth_key)
+        self._items = None
+        self._customers = None
+        self._billogram = None
+        self._settings = None
+        self._logotype = None
+        self._reports = None
+        self._user_agent = user_agent or USER_AGENT
+        self._api_base = api_base or API_URL_BASE
+
+    @property
+    def items(self):
+        "Provide access to the items database"
+        if self._items is None:
+            self._items = SimpleClass(self, 'item', 'item_no')
+        return self._items
+
+    @property
+    def customers(self):
+        "Provide access to the customer database"
+        if self._customers is None:
+            self._customers = SimpleClass(self, 'customer', 'customer_no')
+        return self._customers
+
+    @property
+    def billogram(self):
+        "Provide access to billogram objects and attached invoices"
+        if self._billogram is None:
+            self._billogram = BillogramClass(self)
+        return self._billogram
+
+    @property
+    def settings(self):
+        "Provide access to settings for the Billogram account"
+        if self._settings is None:
+            self._settings = SingletonObject(self, 'settings')
+        return self._settings
+
+    @property
+    def logotype(self):
+        "Provide access to the logotype for the Billogram account"
+        if self._logotype is None:
+            self._logotype = SingletonObject(self, 'logotype')
+        return self._logotype
+
+    @property
+    def reports(self):
+        "Provide access to the reports database"
+        if self._reports is None:
+            self._reports = SimpleClass(self, 'report', 'filename')
+        return self._reports
+
+    @classmethod
+    def _check_api_response(cls, resp, expect_content_type=None):
+        if not resp.ok or expect_content_type is None:
+            # if the request failed the response should always be json
+            expect_content_type = 'application/json'
+
+        if resp.status_code in range(500, 600):
+            # internal error
+            if resp.headers['content-type'] == expect_content_type and \
+                    expect_content_type == 'application/json':
+                data = resp.json()
+                raise ServiceMalfunctioningError(
+                    'Billogram API reported a server error: {} - {}'.format(
+                        data.get('status'),
+                        data.get('data').get('message')
+                    )
+                )
+
+            raise ServiceMalfunctioningError(
+                'Billogram API reported a server error'
+            )
+
+        if resp.headers['content-type'] != expect_content_type:
+            # the service returned a different content-type from the expected,
+            # probably some malfunction on the remote end
+            if resp.headers['content-type'] == 'application/json':
+                data = resp.json()
+                if data.get('status') == 'NOT_AVAILABLE_YET':
+                    raise ObjectNotAvailableYetError(
+                        'Object not available yet'
+                    )
+            raise ServiceMalfunctioningError(
+                'Billogram API returned unexpected content type'
+            )
+
+        if expect_content_type == 'application/json':
+            data = resp.json()
+            status = data.get('status')
+            if not status:
+                raise ServiceMalfunctioningError(
+                    'Response data missing status field'
+                )
+            if not 'data' in data:
+                raise ServiceMalfunctioningError(
+                    'Response data missing data field'
+                )
+        else:
+            # per above, non-json responses are always ok, so just return them
+            return resp.content
+
+        if resp.status_code == 403:
+            # bad auth
+            if status == 'PERMISSION_DENIED':
+                raise NotAuthorizedError(
+                    'Not allowed to perform the requested operation'
+                )
+            elif status == 'INVALID_AUTH':
+                raise InvalidAuthenticationError(
+                    'The user/key combination is wrong, check the credentials \
+                     used and possibly generate a new set'
+                )
+            elif status == 'MISSING_AUTH':
+                raise RequestFormError('No authentication data was given')
+            else:
+                raise PermissionDeniedError(
+                    'Permission denied, status={}'.format(
+                        status
+                    )
+                )
+
+        if resp.status_code == 404:
+            # not found
+            if data.get('status') == 'NOT_AVAILABLE_YET':
+                raise ObjectNotFoundError('Object not available yet')
+            raise ObjectNotFoundError('Object not found')
+
+        if resp.status_code == 405:
+            # bad http method
+            raise RequestFormError('Invalid HTTP method')
+
+        if status == 'OK':
+            return data
+
+        errordata = data.get('data', {})
+
+        raise {
+            'MISSING_QUERY_PARAMETER': RequestFormError,
+            'INVALID_QUERY_PARAMETER': RequestFormError,
+            'INVALID_PARAMETER': InvalidFieldValueError,
+            'INVALID_PARAMETER_COMBINATION': InvalidFieldCombinationError,
+            'READ_ONLY_PARAMETER': ReadOnlyFieldError,
+            'UNKNOWN_PARAMETER': UnknownFieldError,
+            'INVALID_OBJECT_STATE': InvalidObjectStateError,
+        }.get(status, RequestDataError)(**errordata)
+
+    def get(self, obj, params=None, expect_content_type=None):
+        "Perform a HTTP GET request to the Billogram API"
+        url = '{}/{}'.format(self._api_base, obj)
+        return self._check_api_response(
+            requests.get(
+                url,
+                auth=self._auth,
+                params=params,
+                headers={'user-agent': self._user_agent}
+            ),
+            expect_content_type=expect_content_type
+        )
+
+    def post(self, obj, data):
+        "Perform a HTTP POST request to the Billogram API"
+        url = '{}/{}'.format(self._api_base, obj)
+        return self._check_api_response(
+            requests.post(
+                url,
+                auth=self._auth,
+                data=json.dumps(data),
+                headers={
+                    'content-type': 'application/json',
+                    'user-agent': self._user_agent
+                }
+            )
+        )
+
+    def put(self, obj, data):
+        "Perform a HTTP PUT request to the Billogram API"
+        url = '{}/{}'.format(self._api_base, obj)
+        return self._check_api_response(
+            requests.put(
+                url,
+                auth=self._auth,
+                data=json.dumps(data),
+                headers={
+                    'content-type': 'application/json',
+                    'user-agent': self._user_agent
+                }
+            )
+        )
+
+    def delete(self, obj):
+        "Perform a HTTP DELETE request to the Billogram API"
+        url = '{}/{}'.format(self._api_base, obj)
+        return self._check_api_response(
+            requests.delete(
+                url,
+                auth=self._auth,
+                headers={'user-agent': self._user_agent}
+            )
+        )
+
+
+class SingletonObject(object):
+    """Represents a remote singleton object on Billogram
+
+    Implements __getattr__ for dict-like access to the data of the remote
+    object, or use the 'data' property to access the backing dict object.
+    The data in this dict and all sub-objects should be treated as read-only,
+    the only way to change the remote object is through the 'update' method.
+
+    The represented object is initially "lazy" and will only be fetched on the
+    first access. If the remote data are changed, the local copy can be updated
+    bythe 'refresh' method.
+
+    See the online documentation for the actual structure of remote objects.
+    """
+    def __init__(self, api, url_name):
+        self._api = api
+        self._object_class = url_name
+        self._data = None
+
+    __slots__ = ('_api', '_object_class', '_data')
+
+    def __getitem__(self, key):
+        "Dict-like access to object data"
+        return self.data[key]
+
+    def __repr__(self):
+        return _printable_repr(
+            "<Billogram object '{}'{}>".format(
+                self._url,
+                (self._data is None) and ' (lazy)' or ''
+            )
+        )
+
+    @property
+    def _url(self):
+        return self._object_class
+
+    @property
+    def data(self):
+        "Access the data of the actual object"
+        if self._data is None:
+            self.refresh()
+        return self._data
+
+    def refresh(self):
+        "Refresh the local copy of the object data from remote"
+        resp = self._api.get(self._url)
+        self._data = resp['data']
+        return self
+
+    def update(self, data):
+        "Modify the remote object with a partial or complete structure"
+        resp = self._api.put(self._url, data)
+        self._data = resp['data']
+        return self
+
+
+class SimpleObject(SingletonObject):
+    """Represents a remote object on the Billogram service
+
+    Implements __getattr__ for dict-like access to the data of the remote
+    object, or use the 'data' property to access the backing dict object.
+    The data in this dict and all sub-objects should be treated as read-only,
+    the only way to change the remote object is through the 'update' method.
+
+    If the remote data are changed, the local copy can be updated by
+    the 'refresh' method.
+
+    The 'delete' method can be used to remove the backing object.
+
+    See the online documentation for the actual structure of remote objects.
+    """
+    def __init__(self, api, object_class, data):
+        self._api = api
+        self._object_class = object_class
+        self._data = data
+
+    __slots__ = ()
+
+    @property
+    def _url(self):
+        return self._object_class._url_of(self)
+
+    def __getattr__(self, key):
+        return self._data[key]
+
+    def delete(self):
+        "Remove the remote object from the database"
+        self._api.delete(self._url)
+        return None
+
+
+class Query(object):
+    """Builds queries and fetches pages of remote objects
+
+    Due to internal limitations in Billogram it is currently only possible to
+    filter on a single field or special query at a time. This may change in the
+    future. When it does the API will continue supporting the old filtering
+    mechanism, however this client library will be updated to use the new one,
+    and at that point we will strongly recommend all applications be updated.
+
+    The exact fields and special queries available for each object type varies,
+    see the online documentation for details.
+    """
+    def __init__(self, type_class):
+        self._type_class = type_class
+        self._filter = {}
+        self._count_cached = None
+        self._page_size = 100
+        self._order = {}
+
+    def _make_query(self, page_number=1, page_size=None):
+        query_args = {
+            'page_size': page_size or self._page_size,
+            'page': page_number,
+        }
+        query_args.update(self._get_queryargs())
+        resp = self._type_class.api.get(self._type_class._url_name, query_args)
+        self._count_cached = resp['meta']['total_count']
+        return resp
+
+    def _get_queryargs(self):
+        args = {}
+        args.update(self.filter)
+        args.update(self.order)
+        return args
+
+    @property
+    def count(self):
+        """Total amount of objects matched by the current query, reading this
+        may cause a remote request"""
+        if self._count_cached is None:
+            # make a query for a single result,
+            # this will update the cached count
+            self._make_query(1, 1)
+        return self._count_cached
+
+    @property
+    def total_pages(self):
+        """Total number of pages required for all objects based on current
+        pagesize, reading this may cause a remote request"""
+        return (self.count + self.page_size - 1) // self.page_size
+
+    @property
+    def page_size(self):
+        "Number of objects to return per page"
+        return self._page_size
+
+    @page_size.setter
+    def page_size(self, value):
+        value = int(value)
+        assert value >= 1
+        self._page_size = value
+        return self
+
+    @property
+    def filter(self):
+        "Filter to apply to query"
+        return self._filter
+
+    @filter.setter
+    def filter(self, value):
+        if value == self._filter:
+            return
+        if value:
+            assert 'filter_type' in value and \
+                'filter_field' in value and \
+                'filter_value' in value
+            assert value['filter_type'] in (
+                'field',
+                'field-prefix',
+                'field-search',
+                'special'
+                )
+            self._filter = dict(value)
+        else:
+            self._filter = {}
+        self._count_cached = None
+        return self
+
+    @property
+    def order(self):
+        return self._order
+
+    @order.setter
+    def order(self, value):
+        if value:
+            assert 'order_field' in value and 'order_direction' in value
+            assert value['order_direction'] in ('asc', 'desc')
+            self._order = dict(value)
+        else:
+            self._order = {}
+        return self
+
+    def make_filter(self, filter_type=None, filter_field=None,
+                    filter_value=None):
+        if None in (filter_type, filter_field, filter_value):
+            self.filter = {}
+        else:
+            self.filter = {
+                'filter_type': filter_type,
+                'filter_field': filter_field,
+                'filter_value': filter_value
+            }
+        return self
+
+    def remove_filter(self):
+        "Remove any filter currently set"
+        self.filter = {}
+        return self
+
+    def filter_field(self, filter_field, filter_value):
+        "Filter on a basic field, look for exact matches"
+        return self.make_filter('field', filter_field, filter_value)
+
+    def filter_prefix(self, filter_field, filter_value):
+        "Filter on a basic field, look for prefix matches"
+        return self.make_filter('field-prefix', filter_field, filter_value)
+
+    def filter_search(self, filter_field, filter_value):
+        "Filter on a basic field, look for substring matches"
+        return self.make_filter('field-search', filter_field, filter_value)
+
+    def filter_special(self, filter_field, filter_value):
+        "Filter on a special query"
+        return self.make_filter('special', filter_field, filter_value)
+
+    def search(self, search_terms):
+        "Filter by a full data search (exact meaning depends on object type)"
+        return self.make_filter('special', 'search', search_terms)
+
+    def get_page(self, page_number):
+        "Fetch objects for the one-based page number"
+        resp = self._make_query(int(page_number))
+        return [
+            self._type_class._object_class(
+                self._type_class.api,
+                self._type_class,
+                o
+            ) for o in resp['data']
+        ]
+
+    def iter_all(self):
+        "Iterate over all matched objects"
+        # make a copy of ourselves so parameters can't be changed behind
+        # our back
+        import copy
+        qry = copy.copy(self)
+        # iterate over every object on every page
+        for page_number in range(1, qry.total_pages+1):
+            page = qry.get_page(page_number)
+            for obj in page:
+                yield obj
+
+
+class SimpleClass(object):
+    """Represents a collection of remote objects on the Billogram service
+
+    Provides methods to search, fetch and create instances of the object type.
+
+    See the online documentation for the actual structure of remote objects.
+    """
+    _object_class = SimpleObject
+
+    def __init__(self, api, url_name, object_id_field):
+        self._api = api
+        self._url_name = url_name
+        self._object_id_field = object_id_field
+
+    def _url_of(self, obj=None, obj_id=None):
+        if obj_id is None:
+            obj_id = obj[self._object_id_field]
+        return '{}/{}'.format(self.url_name, obj_id)
+
+    @property
+    def url_name(self):
+        return self._url_name
+
+    @property
+    def api(self):
+        return self._api
+
+    def query(self):
+        "Create a query for objects of this type"
+        return Query(self)
+
+    def get(self, object_id):
+        "Fetch a single object by its identification"
+        resp = self.api.get(self._url_of(obj_id=object_id))
+        return self._object_class(self.api, self, resp['data'])
+
+    def create(self, data):
+        "Create a new object with the given data"
+        resp = self.api.post(self.url_name, data)
+        return self._object_class(self.api, self, resp['data'])
+
+
+class BillogramObject(SimpleObject):
+    """Represents a billogram object on the Billogram service
+
+    In addition to the basic methods of the SimpleObject remote object class,
+    also provides specialized methods to perform events on billogram objects.
+
+    See the online documentation for the actual structure of billogram objects.
+    """
+    __slots__ = ()
+
+    def perform_event(self, evt_name, evt_data=None):
+        """Perform a generic state transition event on billogram object
+        """
+        url = '{}/command/{}'.format(self._url, evt_name)
+        resp = self._api.post(url, evt_data)
+        self._data = resp['data']
+        return self
+
+    def create_payment(self, amount):
+        """Create a manual payment on billogram
+
+        Only possible in "Unpaid" state.
+        """
+        assert amount > 0
+        return self.perform_event('payment', {'amount': amount})
+
+    def credit_amount(self, amount):
+        """Credit a specific amount of the billogram
+
+        Only possible in states "Unpaid", "Sold" and "Ended".
+        """
+        assert amount > 0
+        return self.perform_event(
+            'credit',
+            {
+                'mode': 'amount',
+                'amount': amount
+            }
+        )
+
+    def credit_full(self):
+        """Credit the full, original amount of the billogram
+
+        Only possible in states "Unpaid", "Sold" and "Ended".
+        """
+        return self.perform_event('credit', {'mode': 'full'})
+
+    def credit_remaining(self):
+        """Credit the remaining unpaid amount of the billogram
+
+        Only possible in states "Unpaid", "Sold" and "Ended".
+        """
+        return self.perform_event('credit', {'mode': 'remaining'})
+
+    def send_message(self, message):
+        """Send a message to the recipient of the billogram
+
+        Possible from all states, except on deleted billograms.
+        """
+        return self.perform_event('message', {'message': message})
+
+    def send_to_collector(self):
+        """Send the billogram to the collection agency
+
+        Only possible from state "Unpaid".
+        """
+        return self.perform_event('collect')
+
+    def send_to_factoring(self):
+        """Send the billogram to the factoring agency to be sold
+
+        Only possible from state "Unattested".
+        """
+        return self.perform_event('sell')
+
+    def send_reminder(self, method=None):
+        """Send a reminder to the recipient
+
+        'method' is the type of reminder to be sent:
+         - "Email"
+         - "Letter".
+
+        Only possible from state "Unpaid".
+        """
+        if method:
+            assert method in ('Email', 'Letter')
+            return self.perform_event('remind', {'method': method})
+        return self.perform_event('remind')
+
+    def send(self, method):
+        """Send the billogram to the recipient
+
+        'method' is the medium to send the billogram by:
+         - "Email"
+         - "Letter"
+         - "Email+Letter".
+
+        Only possible from state "Unattested".
+        """
+        assert method in ('Email', 'Letter', 'Email+Letter')
+        return self.perform_event('send', {'method': method})
+
+    def resend(self, method=None):
+        """Send the billogram to the recipient again
+
+        'method' is the medium to send the billogram by:
+         - "Email"
+         - "Letter".
+
+        Only possible from state "Unpaid".
+        """
+        if method:
+            assert method in ('Email', 'Letter')
+            return self.perform_event('resend', {'method': method})
+        return self.perform_event('resend')
+
+    def get_invoice_pdf(self, letter_id=None, invoice_no=None):
+        """Fetch the PDF content for a specific invoice on this billogram
+        """
+        import base64
+
+        url = '{}.pdf'.format(self._url)
+
+        params = {}
+        if letter_id:
+            params['letter_id'] = letter_id
+        if invoice_no:
+            params['invoice_no'] = invoice_no
+        resp = self._api.get(
+            url,
+            params,
+            expect_content_type='application/json'
+        )
+        return base64.b64decode(resp['data']['content'])
+
+    def get_attachment_pdf(self, letter_id=None, invoice_no=None):
+        """Fetch the PDF attachment for the billogram
+        """
+        import base64
+
+        url = '{}/attachment.pdf'.format(self._url)
+
+        resp = self._api.get(url, expect_content_type='application/json')
+        return base64.b64decode(resp['data']['content'])
+
+    def attach_pdf(self, filepath):
+        """Attach a PDF to the billogram
+        """
+        import base64
+        import os
+
+        with file(filepath) as f:
+            content = f.read()
+
+        filename = os.path.basename(filepath)
+        return self.perform_event(
+            'attach',
+            {
+                'content': base64.b64encode(content),
+                'filename': filename
+            }
+        )
+
+    def writeoff(self):
+        """Write-off remaining fees from a billogram.
+        """
+        return self.perform_event('writeoff')
+
+
+class BillogramQuery(Query):
+    """Represents a query for billogram objects
+    """
+
+    def filter_state_any(self, *states):
+        "Find billogram objects with any state of the listed ones"
+        if len(states) == 1 and (
+            isinstance(states[0], list) or
+            isinstance(states[0], tuple) or
+            isinstance(states[0], set) or
+            isinstance(states[0], frozenset)
+        ):
+            states = states[0]
+        assert all(isinstance(s, basestring) for s in states)
+        return self.filter_field('state', ','.join(states))
+
+
+class BillogramClass(SimpleClass):
+    """Represents the collection of billogram objects on the Billogram service
+
+    In addition to the methods of the SimpleClass collection wrapper, also
+    provides specialized creation methods to create billogram objects and state
+    transition them immediately.
+    """
+    _object_class = BillogramObject
+
+    def __init__(self, api):
+        super(BillogramClass, self).__init__(api, 'billogram', 'id')
+
+    def query(self):
+        "Create a query for billogram objects"
+        return BillogramQuery(self)
+
+    def create_and_send(self, data, method):
+        """Create the billogram and send it to the recipient in one operation
+
+        'method' is the medium to send the billogram by:
+         - "Email"
+         - "Letter"
+         - "Email+Letter".
+
+        New billogram will be in state "Unpaid" or "Ended" (if the total sum
+        would be zero).
+        """
+        assert method in ('Email', 'Letter', 'Email+Letter')
+        billogram = self.create(data)
+        try:
+            billogram.send(method)
+        except Exception as e:
+            billogram.delete()
+            raise e
+        return billogram
+
+    def create_and_sell(self, data):
+        """Create the billogram and send it to factoring in one operation
+
+        New billogram will be in state "Factoring".
+        """
+        data['_event'] = 'sell'
+        billogram = self.create(data)
+        return billogram
+
+
+# make an exportable namespace-class with all the exceptions
+BillogramExceptions = type(
+    str('BillogramExceptions'),
+    (),
+    {
+        nm: cl for
+        nm, cl in
+        globals().items() if
+        isinstance(cl, type) and issubclass(cl, BillogramAPIError)
+    }
+)
+
+# just the BillogramAPI class and the exceptions are really part
+# of the call API of this module
+__all__ = ['BillogramAPI', 'BillogramExceptions']
+
+</code></pre>
+  </div>
+
+  </header>
+
+  <section id="section-items">
+
+
+    <h2 class="section-title" id="header-classes">Classes</h2>
+      
+      <div class="item">
+      <p id="billogram_api.BillogramAPI" class="name">class <span class="ident">BillogramAPI</span></p>
+      
+  
+    <div class="desc"><p>Pseudo-connection to the Billogram v2 API</p>
+<p>Objects of this class provide a call interface to the Billogram
+v2 HTTP API.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-billogram_api.BillogramAPI', this);">Show source &equiv;</a></p>
+  <div id="source-billogram_api.BillogramAPI" class="source">
+    <pre><code>class BillogramAPI(object):
+    """Pseudo-connection to the Billogram v2 API
+
+    Objects of this class provide a call interface to the Billogram
+    v2 HTTP API.
+    """
+    def __init__(self, auth_user, auth_key, user_agent=None, api_base=None):
+        """Create a Billogram API connection object
+
+        Pass the API authentication in the auth_user and auth_key parameters.
+        API accounts can only be created from the Billogram web interface.
+        """
+        self._auth = (auth_user, auth_key)
+        self._items = None
+        self._customers = None
+        self._billogram = None
+        self._settings = None
+        self._logotype = None
+        self._reports = None
+        self._user_agent = user_agent or USER_AGENT
+        self._api_base = api_base or API_URL_BASE
+
+    @property
+    def items(self):
+        "Provide access to the items database"
+        if self._items is None:
+            self._items = SimpleClass(self, 'item', 'item_no')
+        return self._items
+
+    @property
+    def customers(self):
+        "Provide access to the customer database"
+        if self._customers is None:
+            self._customers = SimpleClass(self, 'customer', 'customer_no')
+        return self._customers
+
+    @property
+    def billogram(self):
+        "Provide access to billogram objects and attached invoices"
+        if self._billogram is None:
+            self._billogram = BillogramClass(self)
+        return self._billogram
+
+    @property
+    def settings(self):
+        "Provide access to settings for the Billogram account"
+        if self._settings is None:
+            self._settings = SingletonObject(self, 'settings')
+        return self._settings
+
+    @property
+    def logotype(self):
+        "Provide access to the logotype for the Billogram account"
+        if self._logotype is None:
+            self._logotype = SingletonObject(self, 'logotype')
+        return self._logotype
+
+    @property
+    def reports(self):
+        "Provide access to the reports database"
+        if self._reports is None:
+            self._reports = SimpleClass(self, 'report', 'filename')
+        return self._reports
+
+    @classmethod
+    def _check_api_response(cls, resp, expect_content_type=None):
+        if not resp.ok or expect_content_type is None:
+            # if the request failed the response should always be json
+            expect_content_type = 'application/json'
+
+        if resp.status_code in range(500, 600):
+            # internal error
+            if resp.headers['content-type'] == expect_content_type and \
+                    expect_content_type == 'application/json':
+                data = resp.json()
+                raise ServiceMalfunctioningError(
+                    'Billogram API reported a server error: {} - {}'.format(
+                        data.get('status'),
+                        data.get('data').get('message')
+                    )
+                )
+
+            raise ServiceMalfunctioningError(
+                'Billogram API reported a server error'
+            )
+
+        if resp.headers['content-type'] != expect_content_type:
+            # the service returned a different content-type from the expected,
+            # probably some malfunction on the remote end
+            if resp.headers['content-type'] == 'application/json':
+                data = resp.json()
+                if data.get('status') == 'NOT_AVAILABLE_YET':
+                    raise ObjectNotAvailableYetError(
+                        'Object not available yet'
+                    )
+            raise ServiceMalfunctioningError(
+                'Billogram API returned unexpected content type'
+            )
+
+        if expect_content_type == 'application/json':
+            data = resp.json()
+            status = data.get('status')
+            if not status:
+                raise ServiceMalfunctioningError(
+                    'Response data missing status field'
+                )
+            if not 'data' in data:
+                raise ServiceMalfunctioningError(
+                    'Response data missing data field'
+                )
+        else:
+            # per above, non-json responses are always ok, so just return them
+            return resp.content
+
+        if resp.status_code == 403:
+            # bad auth
+            if status == 'PERMISSION_DENIED':
+                raise NotAuthorizedError(
+                    'Not allowed to perform the requested operation'
+                )
+            elif status == 'INVALID_AUTH':
+                raise InvalidAuthenticationError(
+                    'The user/key combination is wrong, check the credentials \
+                     used and possibly generate a new set'
+                )
+            elif status == 'MISSING_AUTH':
+                raise RequestFormError('No authentication data was given')
+            else:
+                raise PermissionDeniedError(
+                    'Permission denied, status={}'.format(
+                        status
+                    )
+                )
+
+        if resp.status_code == 404:
+            # not found
+            if data.get('status') == 'NOT_AVAILABLE_YET':
+                raise ObjectNotFoundError('Object not available yet')
+            raise ObjectNotFoundError('Object not found')
+
+        if resp.status_code == 405:
+            # bad http method
+            raise RequestFormError('Invalid HTTP method')
+
+        if status == 'OK':
+            return data
+
+        errordata = data.get('data', {})
+
+        raise {
+            'MISSING_QUERY_PARAMETER': RequestFormError,
+            'INVALID_QUERY_PARAMETER': RequestFormError,
+            'INVALID_PARAMETER': InvalidFieldValueError,
+            'INVALID_PARAMETER_COMBINATION': InvalidFieldCombinationError,
+            'READ_ONLY_PARAMETER': ReadOnlyFieldError,
+            'UNKNOWN_PARAMETER': UnknownFieldError,
+            'INVALID_OBJECT_STATE': InvalidObjectStateError,
+        }.get(status, RequestDataError)(**errordata)
+
+    def get(self, obj, params=None, expect_content_type=None):
+        "Perform a HTTP GET request to the Billogram API"
+        url = '{}/{}'.format(self._api_base, obj)
+        return self._check_api_response(
+            requests.get(
+                url,
+                auth=self._auth,
+                params=params,
+                headers={'user-agent': self._user_agent}
+            ),
+            expect_content_type=expect_content_type
+        )
+
+    def post(self, obj, data):
+        "Perform a HTTP POST request to the Billogram API"
+        url = '{}/{}'.format(self._api_base, obj)
+        return self._check_api_response(
+            requests.post(
+                url,
+                auth=self._auth,
+                data=json.dumps(data),
+                headers={
+                    'content-type': 'application/json',
+                    'user-agent': self._user_agent
+                }
+            )
+        )
+
+    def put(self, obj, data):
+        "Perform a HTTP PUT request to the Billogram API"
+        url = '{}/{}'.format(self._api_base, obj)
+        return self._check_api_response(
+            requests.put(
+                url,
+                auth=self._auth,
+                data=json.dumps(data),
+                headers={
+                    'content-type': 'application/json',
+                    'user-agent': self._user_agent
+                }
+            )
+        )
+
+    def delete(self, obj):
+        "Perform a HTTP DELETE request to the Billogram API"
+        url = '{}/{}'.format(self._api_base, obj)
+        return self._check_api_response(
+            requests.delete(
+                url,
+                auth=self._auth,
+                headers={'user-agent': self._user_agent}
+            )
+        )
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#billogram_api.BillogramAPI">BillogramAPI</a></li>
+          <li>__builtin__.object</li>
+          </ul>
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="billogram_api.BillogramAPI.billogram" class="name">var <span class="ident">billogram</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Provide access to billogram objects and attached invoices</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="billogram_api.BillogramAPI.customers" class="name">var <span class="ident">customers</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Provide access to the customer database</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="billogram_api.BillogramAPI.items" class="name">var <span class="ident">items</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Provide access to the items database</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="billogram_api.BillogramAPI.logotype" class="name">var <span class="ident">logotype</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Provide access to the logotype for the Billogram account</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="billogram_api.BillogramAPI.reports" class="name">var <span class="ident">reports</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Provide access to the reports database</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="billogram_api.BillogramAPI.settings" class="name">var <span class="ident">settings</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Provide access to settings for the Billogram account</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="billogram_api.BillogramAPI.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, auth_user, auth_key, user_agent=None, api_base=None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Create a Billogram API connection object</p>
+<p>Pass the API authentication in the auth_user and auth_key parameters.
+API accounts can only be created from the Billogram web interface.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-billogram_api.BillogramAPI.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-billogram_api.BillogramAPI.__init__" class="source">
+    <pre><code>def __init__(self, auth_user, auth_key, user_agent=None, api_base=None):
+    """Create a Billogram API connection object
+    Pass the API authentication in the auth_user and auth_key parameters.
+    API accounts can only be created from the Billogram web interface.
+    """
+    self._auth = (auth_user, auth_key)
+    self._items = None
+    self._customers = None
+    self._billogram = None
+    self._settings = None
+    self._logotype = None
+    self._reports = None
+    self._user_agent = user_agent or USER_AGENT
+    self._api_base = api_base or API_URL_BASE
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="billogram_api.BillogramAPI.delete">
+    <p>def <span class="ident">delete</span>(</p><p>self, obj)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Perform a HTTP DELETE request to the Billogram API</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-billogram_api.BillogramAPI.delete', this);">Show source &equiv;</a></p>
+  <div id="source-billogram_api.BillogramAPI.delete" class="source">
+    <pre><code>def delete(self, obj):
+    "Perform a HTTP DELETE request to the Billogram API"
+    url = '{}/{}'.format(self._api_base, obj)
+    return self._check_api_response(
+        requests.delete(
+            url,
+            auth=self._auth,
+            headers={'user-agent': self._user_agent}
+        )
+    )
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="billogram_api.BillogramAPI.get">
+    <p>def <span class="ident">get</span>(</p><p>self, obj, params=None, expect_content_type=None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Perform a HTTP GET request to the Billogram API</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-billogram_api.BillogramAPI.get', this);">Show source &equiv;</a></p>
+  <div id="source-billogram_api.BillogramAPI.get" class="source">
+    <pre><code>def get(self, obj, params=None, expect_content_type=None):
+    "Perform a HTTP GET request to the Billogram API"
+    url = '{}/{}'.format(self._api_base, obj)
+    return self._check_api_response(
+        requests.get(
+            url,
+            auth=self._auth,
+            params=params,
+            headers={'user-agent': self._user_agent}
+        ),
+        expect_content_type=expect_content_type
+    )
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="billogram_api.BillogramAPI.post">
+    <p>def <span class="ident">post</span>(</p><p>self, obj, data)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Perform a HTTP POST request to the Billogram API</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-billogram_api.BillogramAPI.post', this);">Show source &equiv;</a></p>
+  <div id="source-billogram_api.BillogramAPI.post" class="source">
+    <pre><code>def post(self, obj, data):
+    "Perform a HTTP POST request to the Billogram API"
+    url = '{}/{}'.format(self._api_base, obj)
+    return self._check_api_response(
+        requests.post(
+            url,
+            auth=self._auth,
+            data=json.dumps(data),
+            headers={
+                'content-type': 'application/json',
+                'user-agent': self._user_agent
+            }
+        )
+    )
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="billogram_api.BillogramAPI.put">
+    <p>def <span class="ident">put</span>(</p><p>self, obj, data)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Perform a HTTP PUT request to the Billogram API</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-billogram_api.BillogramAPI.put', this);">Show source &equiv;</a></p>
+  <div id="source-billogram_api.BillogramAPI.put" class="source">
+    <pre><code>def put(self, obj, data):
+    "Perform a HTTP PUT request to the Billogram API"
+    url = '{}/{}'.format(self._api_base, obj)
+    return self._check_api_response(
+        requests.put(
+            url,
+            auth=self._auth,
+            data=json.dumps(data),
+            headers={
+                'content-type': 'application/json',
+                'user-agent': self._user_agent
+            }
+        )
+    )
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="billogram_api.BillogramExceptions" class="name">class <span class="ident">BillogramExceptions</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#billogram_api.BillogramExceptions">BillogramExceptions</a></li>
+          <li>__builtin__.object</li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="billogram_api.BillogramExceptions.BillogramAPIError" class="name">var <span class="ident">BillogramAPIError</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="billogram_api.BillogramExceptions.InvalidAuthenticationError" class="name">var <span class="ident">InvalidAuthenticationError</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="billogram_api.BillogramExceptions.InvalidFieldCombinationError" class="name">var <span class="ident">InvalidFieldCombinationError</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="billogram_api.BillogramExceptions.InvalidFieldValueError" class="name">var <span class="ident">InvalidFieldValueError</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="billogram_api.BillogramExceptions.InvalidObjectStateError" class="name">var <span class="ident">InvalidObjectStateError</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="billogram_api.BillogramExceptions.MissingFieldError" class="name">var <span class="ident">MissingFieldError</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="billogram_api.BillogramExceptions.NotAuthorizedError" class="name">var <span class="ident">NotAuthorizedError</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="billogram_api.BillogramExceptions.ObjectNotAvailableYetError" class="name">var <span class="ident">ObjectNotAvailableYetError</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="billogram_api.BillogramExceptions.ObjectNotFoundError" class="name">var <span class="ident">ObjectNotFoundError</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="billogram_api.BillogramExceptions.PermissionDeniedError" class="name">var <span class="ident">PermissionDeniedError</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="billogram_api.BillogramExceptions.ReadOnlyFieldError" class="name">var <span class="ident">ReadOnlyFieldError</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="billogram_api.BillogramExceptions.RequestDataError" class="name">var <span class="ident">RequestDataError</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="billogram_api.BillogramExceptions.RequestFormError" class="name">var <span class="ident">RequestFormError</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="billogram_api.BillogramExceptions.ServiceMalfunctioningError" class="name">var <span class="ident">ServiceMalfunctioningError</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="billogram_api.BillogramExceptions.UnknownFieldError" class="name">var <span class="ident">UnknownFieldError</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+      </div>
+      </div>
+
+  </section>
+
+    </article>
+  <div class="clear"> </div>
+  <footer id="footer">
+    <p>
+      Documentation generated by
+      <a href="https://github.com/BurntSushi/pdoc">pdoc 0.3.1</a>
+    </p>
+
+    <p>pdoc is in the public domain with the
+      <a href="http://unlicense.org">UNLICENSE</a></p>
+
+    <p>Design by <a href="http://nadh.in">Kailash Nadh</a></p>
+  </footer>
+</div>
+</body>
+</html>
