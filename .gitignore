@@ -3,3 +3,4 @@ dist/
 *.pyc
 .DS_Store
 _testing_defaults.py
+docs/
