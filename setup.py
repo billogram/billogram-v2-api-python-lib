@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #encoding=utf8
 
-from distutils.core import setup
+from setuptools import setup
 
 with open('README') as file:
     long_description = file.read()
@@ -16,4 +16,7 @@ setup(
     url='https://billogram.com/api/documentation',
     license='MIT',
     py_modules=['billogram_api'],
+    install_requires=[
+        "requests >= 1.1.0",
+    ]
 )
