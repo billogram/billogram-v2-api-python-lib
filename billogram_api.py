@@ -19,7 +19,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"Library for accessing the Billogram v2 HTTP API"
+"""
+Library for accessing the Billogram v2 HTTP API.
+
+Full documentation available at
+[https://billogram.com/api/documentation](https://billogram.com/api/documentation)
+"""
 
 from __future__ import unicode_literals, print_function, division
 import requests
